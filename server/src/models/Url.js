@@ -10,7 +10,6 @@ const urlSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // The index that makes redirects fast
-urlSchema.index({ shortCode: 1 });
 
 // TTL index — MongoDB auto-deletes expired docs
 // (soft approach: we use isActive instead, so skip hard TTL)

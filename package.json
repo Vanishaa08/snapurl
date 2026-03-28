@@ -1,11 +1,19 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "",
+  "main": "src/index.js",
   "scripts": {
-  "dev": "nodemon ./src/index.js"
-},
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
   "dependencies": {
+    "autoprefixer": "^10.4.27",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
@@ -16,6 +24,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.3.3",
     "nanoid": "^5.1.7",
+    "postcss": "^8.5.8",
     "socket.io": "^4.8.3",
     "ua-parser-js": "^2.0.9"
   },

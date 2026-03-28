@@ -4,7 +4,7 @@ const { Server } = require('socket.io');
 
 const app             = require('./app');
 const connectDB       = require('./config/db');
-const connectRedis    = require('./config/redis');
+const { connectRedis } = require('./config/redis');
 const analyticsWorker = require('./workers/analytics.worker');
 
 const PORT = process.env.PORT || 5000;
