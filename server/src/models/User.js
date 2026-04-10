@@ -8,10 +8,10 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Never store plain password — hash before save
-userSchema.pre('save', async function(next) {
-  if (!this.isModified('passwordHash')) return next();
+userSchema.pre('save', async function() {
+  if (!this.isModified('passwordHash')) return;
+  if (this.passwordHash.startsWith('$2')) return;
   this.passwordHash = await bcrypt.hash(this.passwordHash, 12);
-  next();
 });
 
 userSchema.methods.comparePassword = function(plain) {

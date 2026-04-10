@@ -11,11 +11,16 @@ api.interceptors.request.use(cfg => {
 api.interceptors.response.use(
   res => res,
   async err => {
-    if (err.response?.status === 401) {
+    if (err.response?.status === 401 && !err.config._retry) {
+      err.config._retry = true;
       const refresh = localStorage.getItem('refreshToken');
-      if (!refresh) return Promise.reject(err);
+      if (!refresh) {
+        localStorage.clear();
+        window.location.href = '/login';
+        return Promise.reject(err);
+      }
       try {
-        const { data } = await axios.post('/api/auth/refresh', { refreshToken: refresh });
+        const { data } = await api.post('/auth/refresh', { refreshToken: refresh });
         localStorage.setItem('accessToken', data.accessToken);
         localStorage.setItem('refreshToken', data.refreshToken);
         err.config.headers.Authorization = `Bearer ${data.accessToken}`;

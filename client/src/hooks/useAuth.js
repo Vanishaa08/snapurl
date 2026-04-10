@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../services/api';
 
 export function useAuth() {
@@ -6,6 +6,12 @@ export function useAuth() {
     const token = localStorage.getItem('accessToken');
     return token ? { token } : null;
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (token) setUser({ token });
+    else setUser(null);
+  }, []);
 
   const login = async (email, password) => {
     const { data } = await api.post('/auth/login', { email, password });
