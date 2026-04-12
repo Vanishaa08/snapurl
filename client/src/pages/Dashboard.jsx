@@ -105,17 +105,28 @@ export default function Dashboard() {
                   </p>
                 )}
               </div>
+
+              {/* UPDATED BUTTONS DIV */}
               <div style={{display:'flex',gap:'8px',marginLeft:'12px'}}>
+                
+                <button onClick={() => navigate(`/analytics/${u.shortCode}`)}
+                  style={{padding:'6px 14px',borderRadius:'6px',border:'1px solid #c7d2fe',
+                    background:'#eef2ff',color:'#4f46e5',cursor:'pointer',fontSize:'13px'}}>
+                  Analytics
+                </button>
+
                 <button onClick={() => copy(`http://localhost:5000/${u.shortCode}`)}
                   style={{padding:'6px 14px',borderRadius:'6px',border:'1px solid #d1d5db',
                     background:'white',cursor:'pointer',fontSize:'13px'}}>
                   Copy
                 </button>
+
                 <button onClick={() => deleteUrl(u.shortCode)}
                   style={{padding:'6px 14px',borderRadius:'6px',border:'1px solid #fecaca',
                     background:'#fef2f2',color:'#ef4444',cursor:'pointer',fontSize:'13px'}}>
                   Delete
                 </button>
+
               </div>
             </div>
           </div>
