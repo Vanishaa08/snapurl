@@ -10,6 +10,10 @@ const errorMiddleware = require('./middleware/error.middleware');
 
 const app = express();
 
+const morgan = require('morgan');
+
+app.use(morgan('dev'));
+
 app.use(helmet());
 app.use(cors({ 
   origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176'],
