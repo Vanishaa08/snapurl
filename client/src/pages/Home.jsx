@@ -8,7 +8,10 @@ export default function Home() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [url, setUrl]         = useState('');
-  const [result, setResult]   = useState(null);
+  const [result, setResult]   = useState(() => {
+    const saved = localStorage.getItem('lastResult');
+    return saved ? JSON.parse(saved) : null;
+  });
   const [error, setError]     = useState('');
   const [loading, setLoading] = useState(false);
   const [toast, setToast]     = useState('');
@@ -23,8 +26,11 @@ export default function Home() {
     setError(''); setResult(null); setLoading(true);
     try {
       const { data } = await api.post('/urls', { originalUrl: url });
+      console.log('Response:', data);
       setResult(data);
+      localStorage.setItem('lastResult', JSON.stringify(data));
     } catch (err) {
+      console.log('Error:', err.response);
       setError(err.response?.data?.error || 'Something went wrong');
     } finally { setLoading(false); }
   };
