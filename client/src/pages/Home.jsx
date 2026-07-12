@@ -29,6 +29,12 @@ export default function Home() {
       console.log('Response:', data);
       setResult(data);
       localStorage.setItem('lastResult', JSON.stringify(data));
+      
+      // Save to anonymous history
+      const history = JSON.parse(localStorage.getItem('urlHistory') || '[]');
+      history.unshift({ shortUrl: data.shortUrl, originalUrl: url, createdAt: new Date() });
+      localStorage.setItem('urlHistory', JSON.stringify(history.slice(0, 5))); // keep last 5
+      
     } catch (err) {
       console.log('Error:', err.response);
       setError(err.response?.data?.error || 'Something went wrong');
@@ -137,6 +143,34 @@ export default function Home() {
             </div>
           </div>
         )}
+
+        {/* Anonymous history */}
+        {!user && (() => {
+          const history = JSON.parse(localStorage.getItem('urlHistory') || '[]');
+          return history.length > 1 ? (
+            <div style={{marginTop:'24px',width:'100%',maxWidth:'620px'}}>
+              <p style={{fontSize:'13px',color:'#6b7280',marginBottom:'8px'}}>Recent links</p>
+              {history.slice(1).map((h, i) => (
+                <div key={i} style={{background:'white',border:'1px solid #e5e7eb',borderRadius:'8px',
+                  padding:'10px 14px',marginBottom:'6px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                  <div>
+                    <a href={h.shortUrl} target="_blank" rel="noreferrer"
+                      style={{color:'#4f46e5',fontSize:'13px',fontWeight:'500'}}>{h.shortUrl}</a>
+                    <p style={{fontSize:'12px',color:'#9ca3af',margin:'2px 0 0',
+                      overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',maxWidth:'400px'}}>
+                      {h.originalUrl}
+                    </p>
+                  </div>
+                  <button onClick={() => navigator.clipboard.writeText(h.shortUrl)}
+                    style={{fontSize:'12px',padding:'4px 10px',borderRadius:'6px',
+                      border:'1px solid #e5e7eb',background:'white',cursor:'pointer'}}>
+                    Copy
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : null;
+        })()}
       </div>
     </div>
   );
