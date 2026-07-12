@@ -1,6 +1,6 @@
 # ⚡ SnapURL
 
-Production-Grade Distributed URL Shortener
+  Distributed URL Shortener
 
 <div align="center">
 
