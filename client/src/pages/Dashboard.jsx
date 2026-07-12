@@ -99,11 +99,18 @@ export default function Dashboard() {
                   overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
                   {u.originalUrl}
                 </p>
-                {u.expiresAt && (
-                  <p style={{color:'#f59e0b',fontSize:'12px',marginTop:'4px'}}>
-                    Expires: {new Date(u.expiresAt).toLocaleDateString()}
-                  </p>
-                )}
+                {u.expiresAt && (() => {
+                  const diff = new Date(u.expiresAt) - new Date();
+                  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                  const expired = diff < 0;
+                  return (
+                    <p style={{fontSize:'12px',marginTop:'4px',
+                      color: expired ? '#ef4444' : days < 1 ? '#f59e0b' : '#6b7280'}}>
+                      {expired ? '⚠ Expired' : days > 0 ? `Expires in ${days}d ${hours}h` : `Expires in ${hours}h`}
+                    </p>
+                  );
+                })()}
               </div>
 
               {/* UPDATED BUTTONS DIV */}
