@@ -411,7 +411,7 @@ Analytics Worker (BLPOP loop):
 2. geoip.lookup(ip) → { country, city }
 3. UAParser(userAgent) → { device.type }
 4. Analytics.create({ shortCode, country, city, device, referrer })
-5. io.emit(analytics:${shortCode}, { country, device })
+5. io.emit(`analytics:${shortCode}`, { country, device })
 6. React dashboard receives event → refetches analytics → charts update
 🗄️ Database Schema
 User Collection
@@ -714,7 +714,7 @@ Redis	Using Redis as a cache, rate limiter, and message queue showed how a singl
 Async Processing	The fire-and-forget pattern with BLPOP is a simplified version of what production systems like Uber and Twitter use for analytics ingestion.
 JWT Security	Understanding why rotation matters, why refresh tokens must be stored server-side, and how auto-refresh via interceptors works transparently.
 Docker	Multi-stage builds: building the React app in one stage and serving it from Nginx in another reduces the final image size significantly.
-Nginx	As a reverse proxy: routing, SSL termination, and static file serving — three jobs in one config file.
+Nginx	  As a reverse proxy: routing, SSL termination, and static file serving — three jobs in one config file.
 CI/CD	Automating build checks on every push prevents shipping broken code.
 📜 License
 MIT License — see LICENSE for details.
