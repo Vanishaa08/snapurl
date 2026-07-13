@@ -9,6 +9,10 @@ export default function Dashboard() {
   const [urls, setUrls]     = useState([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast]   = useState('');
+  const [page, setPage] = useState(1);
+  const PER_PAGE = 10;
+  const totalPages = Math.ceil(urls.length / PER_PAGE);
+  const visibleUrls = urls.slice((page-1) * PER_PAGE, page * PER_PAGE);
 
   const showToast = (msg) => {
     setToast(msg);
@@ -104,7 +108,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        {urls.map(u => (
+        {visibleUrls.map(u => (
           <div key={u._id} style={{background:'white',border:'1px solid #e5e7eb',
             borderRadius:'12px',padding:'16px 20px',marginBottom:'12px'}}>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
@@ -164,6 +168,26 @@ export default function Dashboard() {
             </div>
           </div>
         ))}
+
+        {totalPages > 1 && (
+          <div style={{display:'flex',justifyContent:'center',gap:'8px',marginTop:'16px'}}>
+            <button onClick={() => setPage(p => Math.max(1, p-1))} disabled={page === 1}
+              style={{padding:'6px 14px',borderRadius:'8px',border:'1px solid #e5e7eb',
+                background:'white',cursor:page===1?'not-allowed':'pointer',
+                color:page===1?'#9ca3af':'#111'}}>
+              Previous
+            </button>
+            <span style={{padding:'6px 14px',fontSize:'14px',color:'#6b7280'}}>
+              {page} / {totalPages}
+            </span>
+            <button onClick={() => setPage(p => Math.min(totalPages, p+1))} disabled={page === totalPages}
+              style={{padding:'6px 14px',borderRadius:'8px',border:'1px solid #e5e7eb',
+                background:'white',cursor:page===totalPages?'not-allowed':'pointer',
+                color:page===totalPages?'#9ca3af':'#111'}}>
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
