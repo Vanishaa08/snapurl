@@ -95,7 +95,7 @@ export default function Home() {
 
         {/* Form */}
         <form onSubmit={handleShorten}
-          style={{display:'flex',gap:'8px',width:'100%',maxWidth:'620px'}}>
+          style={{display:'flex',flexDirection:'column',gap:'8px',width:'100%',maxWidth:'620px'}}>
           <input
             style={{flex:1,border:'1px solid #d1d5db',borderRadius:'8px',
               padding:'12px 16px',fontSize:'15px',outline:'none'}}
@@ -104,7 +104,7 @@ export default function Home() {
           <button
             style={{background:'#4f46e5',color:'white',padding:'12px 24px',
               borderRadius:'8px',border:'none',cursor:'pointer',fontWeight:'600',
-              fontSize:'15px',opacity:loading?0.7:1}}
+              fontSize:'15px',opacity:loading?0.7:1,width:'100%'}}
             disabled={loading}>
             {loading ? '...' : 'Shorten'}
           </button>
