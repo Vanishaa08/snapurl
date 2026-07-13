@@ -85,9 +85,19 @@ exports.redirect = async (req, res, next) => {
 
 exports.getUserUrls = async (req, res, next) => {
   try {
+    const Analytics = require('../models/Analytics');
     const urls = await Url.find({ userId: req.user.userId, isActive: true })
                           .sort({ createdAt: -1 });
-    res.json(urls);
+
+    // Add click count to each URL
+    const urlsWithClicks = await Promise.all(
+      urls.map(async (url) => {
+        const clicks = await Analytics.countDocuments({ shortCode: url.shortCode });
+        return { ...url.toObject(), clicks };
+      })
+    );
+
+    res.json(urlsWithClicks);
   } catch (err) { next(err); }
 };
 

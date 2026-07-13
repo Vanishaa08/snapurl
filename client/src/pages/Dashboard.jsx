@@ -131,6 +131,14 @@ export default function Dashboard() {
                 })()}
               </div>
 
+              {/* Click count badge */}
+              <div style={{display:'flex',alignItems:'center',gap:'8px',marginTop:'6px'}}>
+                <span style={{fontSize:'12px',background:'#eef2ff',color:'#4f46e5',
+                  padding:'2px 8px',borderRadius:'99px',fontWeight:'500'}}>
+                  {u.clicks || 0} clicks
+                </span>
+              </div>
+
               {/* UPDATED BUTTONS DIV */}
               <div style={{display:'flex',gap:'8px',marginLeft:'12px'}}>
                 
