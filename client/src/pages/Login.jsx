@@ -14,12 +14,9 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   setError('');
   try {
-    console.log('Attempting login with:', email);
     isLogin ? await login(email, password) : await register(email, password);
-    console.log('Login successful');
     window.location.href = '/dashboard';
   } catch (err) {
-    console.log('Login error:', err);
     setError(err.response?.data?.error || 'Something went wrong');
   }
 };

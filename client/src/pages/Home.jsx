@@ -26,7 +26,6 @@ export default function Home() {
     setError(''); setResult(null); setLoading(true);
     try {
       const { data } = await api.post('/urls', { originalUrl: url });
-      console.log('Response:', data);
       setResult(data);
       localStorage.setItem('lastResult', JSON.stringify(data));
       
@@ -36,7 +35,6 @@ export default function Home() {
       localStorage.setItem('urlHistory', JSON.stringify(history.slice(0, 5))); // keep last 5
       
     } catch (err) {
-      console.log('Error:', err.response);
       setError(err.response?.data?.error || 'Something went wrong');
     } finally { setLoading(false); }
   };
