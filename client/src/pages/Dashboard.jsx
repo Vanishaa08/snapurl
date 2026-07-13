@@ -72,7 +72,25 @@ export default function Dashboard() {
           My URLs
         </h1>
 
-        {loading && <p style={{color:'#6b7280'}}>Loading...</p>}
+        {loading && (
+          <div>
+            {[1,2,3].map(i => (
+              <div key={i} style={{background:'white',border:'1px solid #e5e7eb',
+                borderRadius:'12px',padding:'16px 20px',marginBottom:'12px',
+                animation:'pulse 1.5s ease-in-out infinite'}}>
+                <div style={{height:'16px',background:'#f3f4f6',borderRadius:'4px',
+                  width:'40%',marginBottom:'8px'}}/>
+                <div style={{height:'12px',background:'#f3f4f6',borderRadius:'4px',width:'70%'}}/>
+              </div>
+            ))}
+            <style>{`
+              @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.5; }
+              }
+            `}</style>
+          </div>
+        )}
 
         {!loading && urls.length === 0 && (
           <div style={{textAlign:'center',padding:'60px',background:'white',
