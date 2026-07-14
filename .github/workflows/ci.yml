@@ -10,24 +10,23 @@ jobs:
   server-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '18'
           
       - name: Install server dependencies
         run: |
           cd server
           npm install
           npm install --save-dev mongodb-memory-server
-          npm list --depth=0
           
-      - name: Run server tests with verbose output
+      - name: Run server tests
         run: |
           cd server
-          npm test -- --verbose --no-coverage
+          npm test
         env:
           NODE_ENV: test
           JWT_ACCESS_SECRET: snapurl_access_super_secret_2024
@@ -37,25 +36,21 @@ jobs:
           MACHINE_ID: 1
           BASE_URL: http://localhost:5000
           CLIENT_URL: http://localhost:3000
+          
+      - name: Check server starts
+        run: |
+          cd server
+          node -e "try { require('./src/app'); console.log('Server module loads OK'); } catch(e) { console.error('Server module failed:', e.message); process.exit(1); }"
 
   client-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          
-      - name: Check if client exists
-        run: |
-          if [ -d "client" ] && [ -f "client/package.json" ]; then
-            echo "Client directory found"
-          else
-            echo "No client directory found, skipping client checks"
-            exit 0
-          fi
+          node-version: '18'
           
       - name: Install client dependencies
         run: |
@@ -63,7 +58,7 @@ jobs:
             cd client
             npm install
           else
-            echo "Skipping client install"
+            echo "Client directory not found, skipping"
           fi
           
       - name: Build client
@@ -74,7 +69,6 @@ jobs:
               echo "Client build successful"
             else
               echo "Build script not found, skipping build"
-              exit 0
             fi
           else
             echo "Skipping client build"
@@ -83,13 +77,14 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     needs: [server-check, client-check]
+    if: always()
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '18'
           
       - name: Run linting
         run: |
