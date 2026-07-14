@@ -1,6 +1,5 @@
 require('dotenv').config({ path: require('path').join(__dirname, '../../.env') });
 
-// Mock Redis for tests
 jest.mock('ioredis', () => {
   const mockRedis = {
     get: jest.fn().mockResolvedValue(null),
@@ -18,10 +17,8 @@ jest.mock('ioredis', () => {
   return jest.fn(() => mockRedis);
 });
 
-// Increase timeout for async operations
 jest.setTimeout(30000);
 
-// Global setup for all tests
 beforeAll(() => {
   console.log('Starting test suite...');
 });
