@@ -2,7 +2,7 @@ name: SnapURL CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
     branches: [ main ]
 
@@ -16,11 +16,28 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: server/package-lock.json
           
       - name: Install server dependencies
         run: |
           cd server
           npm install
+          
+      - name: Run server tests
+        run: |
+          cd server
+          npm test
+        env:
+          NODE_ENV: test
+          JWT_ACCESS_SECRET: snapurl_access_super_secret_2024
+          JWT_REFRESH_SECRET: snapurl_refresh_super_secret_2024
+          JWT_ACCESS_EXPIRY: 7d
+          JWT_REFRESH_EXPIRY: 7d
+          MACHINE_ID: 1
+          BASE_URL: http://localhost:5000
+          CLIENT_URL: http://localhost:3000
+          # Use in-memory MongoDB for tests (no external DB needed)
           
       - name: Check server starts
         run: |
@@ -36,6 +53,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
           
       - name: Install client dependencies
         run: |
@@ -46,3 +65,25 @@ jobs:
         run: |
           cd client
           npm run build
+          
+      - name: Check client build
+        run: |
+          cd client
+          test -d dist && echo "Client build successful" || exit 1
+
+  # Optional: Run linting
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          
+      - name: Run ESLint on server
+        run: |
+          cd server
+          npx eslint src/ --ext .js --max-warnings=0 || true
+        continue-on-error: true
