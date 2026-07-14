@@ -19,10 +19,3 @@ jest.mock('ioredis', () => {
 
 jest.setTimeout(30000);
 
-beforeAll(() => {
-  console.log('Starting test suite...');
-});
-
-afterAll(() => {
-  console.log('Test suite completed');
-});

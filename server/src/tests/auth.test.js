@@ -17,12 +17,11 @@ describe('Auth API', () => {
     await closeTestDB();
   });
 
-  // Only clear DB before each test, not after
   beforeEach(async () => {
     await clearTestDB();
   });
 
-  test('POST /api/auth/register — should register a new user', async () => {
+  test('POST /api/auth/register -- should register a new user', async () => {
     const res = await request(app)
       .post('/api/auth/register')
       .send(testUser);
@@ -31,26 +30,22 @@ describe('Auth API', () => {
     expect(res.body).toHaveProperty('refreshToken');
   });
 
-  test('POST /api/auth/register — should reject duplicate email', async () => {
-    // First register the user
+  test('POST /api/auth/register -- should reject duplicate email', async () => {
     await request(app)
       .post('/api/auth/register')
       .send(testUser);
     
-    // Then try to register again with same email
     const res = await request(app)
       .post('/api/auth/register')
       .send(testUser);
     expect(res.statusCode).toBe(409);
   });
 
-  test('POST /api/auth/login — should login with valid credentials', async () => {
-    // First register the user
+  test('POST /api/auth/login -- should login with valid credentials', async () => {
     await request(app)
       .post('/api/auth/register')
       .send(testUser);
     
-    // Then login
     const res = await request(app)
       .post('/api/auth/login')
       .send(testUser);
@@ -58,20 +53,18 @@ describe('Auth API', () => {
     expect(res.body).toHaveProperty('accessToken');
   });
 
-  test('POST /api/auth/login — should reject invalid password', async () => {
-    // First register the user
+  test('POST /api/auth/login -- should reject invalid password', async () => {
     await request(app)
       .post('/api/auth/register')
       .send(testUser);
     
-    // Then try to login with wrong password
     const res = await request(app)
       .post('/api/auth/login')
       .send({ email: testUser.email, password: 'wrongpassword' });
     expect(res.statusCode).toBe(401);
   });
 
-  test('POST /api/auth/register — should reject invalid email', async () => {
+  test('POST /api/auth/register -- should reject invalid email', async () => {
     const res = await request(app)
       .post('/api/auth/register')
       .send({ email: 'notanemail', password: 'password123' });

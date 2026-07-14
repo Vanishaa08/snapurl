@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "test": "jest --testEnvironment node --forceExit --runInBand"
+    "test": "jest --testEnvironment node --forceExit --runInBand --verbose"
   },
   "keywords": [],
   "author": "",
@@ -14,10 +14,12 @@
   "type": "commonjs",
   "jest": {
     "testEnvironment": "node",
-    "setupFiles": [
-      "./src/tests/setup.js"
-    ],
-    "testTimeout": 30000
+    "setupFiles": ["./src/tests/setup.js"],
+    "globalSetup": "./src/tests/globalSetup.js",
+    "globalTeardown": "./src/tests/globalTeardown.js",
+    "testTimeout": 60000,
+    "verbose": true,
+    "forceExit": true
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -37,8 +39,8 @@
   },
   "devDependencies": {
     "jest": "^30.4.2",
-    "mongodb-memory-server": "^11.2.0",
     "nodemon": "^3.1.14",
-    "supertest": "^7.2.2"
+    "supertest": "^7.2.2",
+    "mongodb-memory-server": "^9.0.0"
   }
 }

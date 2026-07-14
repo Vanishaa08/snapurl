@@ -16,14 +16,13 @@ describe('URL API', () => {
 
   beforeEach(async () => {
     await clearTestDB();
-    // Register a new user for each test
     const res = await request(app)
       .post('/api/auth/register')
       .send({ email: `url_test_${Date.now()}@test.com`, password: 'password123' });
     accessToken = res.body.accessToken;
   });
 
-  test('POST /api/urls — should shorten a valid URL anonymously', async () => {
+  test('POST /api/urls -- should shorten a valid URL anonymously', async () => {
     const res = await request(app)
       .post('/api/urls')
       .send({ originalUrl: 'https://google.com' });
@@ -33,14 +32,14 @@ describe('URL API', () => {
     expect(res.body.shortCode).toHaveLength(7);
   });
 
-  test('POST /api/urls — should reject invalid URL', async () => {
+  test('POST /api/urls -- should reject invalid URL', async () => {
     const res = await request(app)
       .post('/api/urls')
       .send({ originalUrl: 'not-a-url' });
     expect(res.statusCode).toBe(400);
   });
 
-  test('POST /api/urls — should shorten URL when authenticated', async () => {
+  test('POST /api/urls -- should shorten URL when authenticated', async () => {
     const res = await request(app)
       .post('/api/urls')
       .set('Authorization', `Bearer ${accessToken}`)
@@ -49,7 +48,7 @@ describe('URL API', () => {
     expect(res.body).toHaveProperty('shortCode');
   });
 
-  test('GET /api/urls/my — should return user URLs when authenticated', async () => {
+  test('GET /api/urls/my -- should return user URLs when authenticated', async () => {
     const res = await request(app)
       .get('/api/urls/my')
       .set('Authorization', `Bearer ${accessToken}`);
@@ -57,13 +56,13 @@ describe('URL API', () => {
     expect(Array.isArray(res.body)).toBe(true);
   });
 
-  test('GET /api/urls/my — should reject unauthenticated request', async () => {
+  test('GET /api/urls/my -- should reject unauthenticated request', async () => {
     const res = await request(app)
       .get('/api/urls/my');
     expect(res.statusCode).toBe(401);
   });
 
-  test('GET /:shortCode — should redirect valid short URL', async () => {
+  test('GET /:shortCode -- should redirect valid short URL', async () => {
     const createRes = await request(app)
       .post('/api/urls')
       .send({ originalUrl: 'https://example.com' });
