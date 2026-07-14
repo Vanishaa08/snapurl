@@ -13,7 +13,6 @@ const app = express();
 
 app.use(morgan('dev'));
 
-// ✅ FIXED helmet config
 app.use(helmet({
   contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false
@@ -28,7 +27,7 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));
 
 app.use('/api/auth',      authRoutes);
 app.use('/api/urls',      urlRoutes);
@@ -36,7 +35,6 @@ app.use('/api/analytics', analyticsRoutes);
 
 app.get('/health', (req, res) => res.json({ status: 'ok', uptime: process.uptime() }));
 
-// ✅ redirect route
 app.get('/:shortCode', urlController.redirect);
 
 app.use(errorMiddleware);

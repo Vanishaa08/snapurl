@@ -1,5 +1,7 @@
 const Joi = require('joi');
 
+const BLOCKED_PROTOCOLS = ['javascript:', 'data:', 'vbscript:', 'file:'];
+
 const schemas = {
   register: Joi.object({
     email:    Joi.string().email().required(),
@@ -10,9 +12,16 @@ const schemas = {
     password: Joi.string().required()
   }),
   shorten: Joi.object({
-    originalUrl:  Joi.string().uri().required(),
-    customAlias:  Joi.string().alphanum().min(3).max(20).optional(),
-    expiresAt:    Joi.date().greater('now').optional()
+    originalUrl: Joi.string().uri({ scheme: ['http', 'https'] }).required()
+      .custom((value, helpers) => {
+        const lower = value.toLowerCase();
+        if (BLOCKED_PROTOCOLS.some(p => lower.startsWith(p))) {
+          return helpers.error('any.invalid');
+        }
+        return value;
+      }),
+    customAlias: Joi.string().alphanum().min(3).max(20).optional(),
+    expiresAt:   Joi.date().greater('now').optional()
   })
 };
 
